@@ -45,6 +45,8 @@ public class moviesAdapter extends RecyclerView.Adapter<moviesAdapter.movieViewH
         return movieList.size();
     }
 
+
+
     //create inner viewHolder class
     public class movieViewHolder extends RecyclerView.ViewHolder {
 

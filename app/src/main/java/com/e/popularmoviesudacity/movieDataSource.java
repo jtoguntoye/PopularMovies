@@ -45,7 +45,6 @@ public class movieDataSource {
         {
             if(response.body()!=null) {
            popularMoviesList = response.body().getMovies();
-           Log.d("DATASOURCE TAG:", "Popular movie list size "+ popularMoviesList.size());
             }
         }
 

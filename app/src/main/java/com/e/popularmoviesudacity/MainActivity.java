@@ -34,22 +34,29 @@ public class MainActivity extends AppCompatActivity {
         mRecyclerView = findViewById(R.id.movie_recycler);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this,2);
         mRecyclerView.setLayoutManager(gridLayoutManager);
-        moviesAdapter = new moviesAdapter(getPopularMovieList());
-        mRecyclerView.setAdapter(moviesAdapter);
+
+        getPopularMovieList();
     }
 
 
     //helper method to get popular movies from repository
-    private List<Movie> getPopularMovieList(){
+    private void getPopularMovieList(){
         movieRepository.getPopularMovies().observe(this, new Observer<List<Movie>>() {
             @Override
             public void onChanged(List<Movie> movies) {
-                popularMovieList = movies;
-                Log.d("MAIN ACTIVITY", "popular movies size "+movies.size());
+                popularMovieList=movies;
+                Log.d("MAIN ACTIVITY:", "popular movies size "+movies.size());
+                showInRecyclerView();      
 
-            }
+             }
         });
-     return popularMovieList;
+
+    }
+
+    private void showInRecyclerView() {
+        moviesAdapter = new moviesAdapter(popularMovieList);
+        mRecyclerView.setAdapter(moviesAdapter);
+        moviesAdapter.notifyDataSetChanged();
     }
 
     @Override
