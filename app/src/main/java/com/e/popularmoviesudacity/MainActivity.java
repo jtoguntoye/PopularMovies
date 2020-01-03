@@ -2,17 +2,26 @@ package com.e.popularmoviesudacity;
 
 import android.os.Bundle;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.Observer;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-import android.view.View;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.e.popularmoviesudacity.model.Movie;
+
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
+    private RecyclerView mRecyclerView;
+    private moviesAdapter moviesAdapter;
+    private movieRepository movieRepository;
+    private List<Movie> popularMovieList;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,14 +30,26 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        movieRepository = new movieRepository();
+        mRecyclerView = findViewById(R.id.movie_recycler);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(this,2);
+        mRecyclerView.setLayoutManager(gridLayoutManager);
+        moviesAdapter = new moviesAdapter(getPopularMovieList());
+        mRecyclerView.setAdapter(moviesAdapter);
+    }
+
+
+    //helper method to get popular movies from repository
+    private List<Movie> getPopularMovieList(){
+        movieRepository.getPopularMovies().observe(this, new Observer<List<Movie>>() {
             @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+            public void onChanged(List<Movie> movies) {
+                popularMovieList = movies;
+                Log.d("MAIN ACTIVITY", "popular movies size "+movies.size());
+
             }
         });
+     return popularMovieList;
     }
 
     @Override

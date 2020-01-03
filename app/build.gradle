@@ -1,9 +1,18 @@
 apply plugin: 'com.android.application'
 
+//load the apiKey file
+def apikeyPropertiesFile = rootProject.file("apikey.properties")
+def apikeyProperties = new Properties()
+    apikeyProperties.load(new FileInputStream(apikeyPropertiesFile))
+
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.0"
     defaultConfig {
+
+        // should correspond to key/value pairs inside the file
+        buildConfigField("String", "TMDB_API_KEY", apikeyProperties['TMDB-API-KEY'])
+
         applicationId "com.e.popularmoviesudacity"
         minSdkVersion 22
         targetSdkVersion 29
@@ -27,4 +36,18 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+
+    //Adding Retrofit and Gson dependency
+    implementation 'com.squareup.retrofit2:retrofit:2.4.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
+
+    implementation 'com.android.support:recyclerview-v7:29.0.0'
+
+
+
+    // Add dependency for glide library for picture loading
+    implementation 'com.github.bumptech.glide:glide:4.9.0'
+
+    // Skip this if you don't want to use integration libraries or configure Glide.
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
 }
