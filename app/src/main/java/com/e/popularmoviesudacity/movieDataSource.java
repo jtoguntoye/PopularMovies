@@ -5,6 +5,7 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.e.popularmoviesudacity.Retrofit.TmdbInterface;
@@ -26,15 +27,15 @@ public class movieDataSource {
 
     private TmdbInterface tmdbInterface;
     private Application application;
-    private List<Movie> popularMoviesList;
+    private MutableLiveData<List<Movie>> popularMoviesList;
 
     public movieDataSource() {
-        popularMoviesList = new ArrayList<>();
+        popularMoviesList = new MutableLiveData<>();
         tmdbInterface = getRetrofitInstance();
 
     }
 
-    public List<Movie> getPopularMovies(){
+    public MutableLiveData<List<Movie>> getPopularMovies(){
 
      Call<MovieResponse> popularMoviesCall =
       tmdbInterface.getPopularMovies(BuildConfig.TMDB_API_KEY); //add your TMDB apiKey here
@@ -44,8 +45,14 @@ public class movieDataSource {
         public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response)
         {
             if(response.body()!=null) {
-           popularMoviesList = response.body().getMovies();
+          //popularMoviesList = response.body().getMovies();
+                popularMoviesList.postValue(response.body().getMovies());
+           Log.d("DATASOURCE", "SIZE:"+ response.body().getMovies().size());
             }
+            else {
+                Log.d("DATASOURCE:", "Response is null");
+            }
+
         }
 
        @Override

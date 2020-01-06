@@ -43,7 +43,9 @@ dependencies {
 
     implementation 'com.android.support:recyclerview-v7:29.0.0'
 
-
+    def lifecycle_version = "2.1.0"
+    // ViewModel and LiveData
+    implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
 
     // Add dependency for glide library for picture loading
     implementation 'com.github.bumptech.glide:glide:4.9.0'

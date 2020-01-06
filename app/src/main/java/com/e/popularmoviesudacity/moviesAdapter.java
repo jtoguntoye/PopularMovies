@@ -19,8 +19,12 @@ public class moviesAdapter extends RecyclerView.Adapter<moviesAdapter.movieViewH
     private List<Movie> movieList;
 
     public moviesAdapter(List<Movie> movieList) {
-        this.movieList = movieList;
+    }
 
+    List<Movie> setAdapterMovieList(List<Movie> movieList){
+        this.movieList = movieList;
+        notifyDataSetChanged();
+        return this.movieList;
     }
 
     @NonNull
@@ -42,16 +46,15 @@ public class moviesAdapter extends RecyclerView.Adapter<moviesAdapter.movieViewH
 
     @Override
     public int getItemCount() {
-        return movieList.size();
+     return  movieList.size();
+
     }
-
-
 
     //create inner viewHolder class
     public class movieViewHolder extends RecyclerView.ViewHolder {
 
         private final ImageView imageView;
-        private String IMAGE_BASE_URL = "http://image.tmdb.org/t/p/w500";
+        private String IMAGE_BASE_URL = "http://image.tmdb.org/t/p/w185";
 
         public movieViewHolder(@NonNull View itemView) {
             super(itemView);

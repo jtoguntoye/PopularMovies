@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -14,13 +15,13 @@ import android.view.MenuItem;
 
 import com.e.popularmoviesudacity.model.Movie;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private moviesAdapter moviesAdapter;
-    private movieRepository movieRepository;
-    private List<Movie> popularMovieList;
+    private mainActivityViewModel mainActivityViewModel;
 
 
     @Override
@@ -30,34 +31,34 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        movieRepository = new movieRepository();
+        mainActivityViewModel = ViewModelProviders.of(this).get(mainActivityViewModel.class);
         mRecyclerView = findViewById(R.id.movie_recycler);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this,2);
         mRecyclerView.setLayoutManager(gridLayoutManager);
+        moviesAdapter = new moviesAdapter(new ArrayList<Movie>());
+        mRecyclerView.setAdapter(moviesAdapter);
 
-        getPopularMovieList();
+        mainActivityViewModel.getPopularMoviesLiveData().observe(this, new Observer<List<Movie>>() {
+            @Override
+            public void onChanged(List<Movie> movieList) {
+                moviesAdapter.setAdapterMovieList(movieList);
+            }
+        });
+        //getPopularMovieList();
+
     }
 
 
     //helper method to get popular movies from repository
+   /*
     private void getPopularMovieList(){
         movieRepository.getPopularMovies().observe(this, new Observer<List<Movie>>() {
             @Override
             public void onChanged(List<Movie> movies) {
-                popularMovieList=movies;
-                Log.d("MAIN ACTIVITY:", "popular movies size "+movies.size());
-                showInRecyclerView();      
-
-             }
-        });
-
+                moviesAdapter.setAdapterMovieList(movies);
+             }});
     }
-
-    private void showInRecyclerView() {
-        moviesAdapter = new moviesAdapter(popularMovieList);
-        mRecyclerView.setAdapter(moviesAdapter);
-        moviesAdapter.notifyDataSetChanged();
-    }
+    */
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

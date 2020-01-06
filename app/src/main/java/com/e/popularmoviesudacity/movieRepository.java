@@ -1,5 +1,7 @@
 package com.e.popularmoviesudacity;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
@@ -14,15 +16,15 @@ public class movieRepository {
     private movieDataSource movieDataSource;
 
     public movieRepository() {
-        popularMovies = new MutableLiveData<>();
+
         movieDataSource = new movieDataSource();
     }
 
 
     LiveData<List<Movie>> getPopularMovies(){
 
-     popularMovies.postValue(movieDataSource.getPopularMovies());
-
+     popularMovies = movieDataSource.getPopularMovies();
+     //Log.d("RepoPopularMovies:", "size is" + movieDataSource.getPopularMovies().size());
      return popularMovies;
     }
 
