@@ -12,19 +12,18 @@ import java.util.List;
 
 //Repository class to obtain the network data source
 public class movieRepository {
-    private MutableLiveData<List<Movie>> popularMovies;
+    private LiveData<List<Movie>> popularMovies;
     private movieDataSource movieDataSource;
 
     public movieRepository() {
 
         movieDataSource = new movieDataSource();
+        popularMovies = movieDataSource.getPopularMovies();
     }
 
 
-    LiveData<List<Movie>> getPopularMovies(){
-
-     popularMovies = movieDataSource.getPopularMovies();
-     //Log.d("RepoPopularMovies:", "size is" + movieDataSource.getPopularMovies().size());
+   public LiveData<List<Movie>> getPopularMovies(){
+     Log.d("RepoPopularMovies:", "size is" + popularMovies.getValue().size());
      return popularMovies;
     }
 

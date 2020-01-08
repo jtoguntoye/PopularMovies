@@ -35,7 +35,7 @@ public class movieDataSource {
 
     }
 
-    public MutableLiveData<List<Movie>> getPopularMovies(){
+    public LiveData<List<Movie>> getPopularMovies(){
 
      Call<MovieResponse> popularMoviesCall =
       tmdbInterface.getPopularMovies(BuildConfig.TMDB_API_KEY); //add your TMDB apiKey here

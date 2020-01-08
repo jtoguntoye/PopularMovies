@@ -8,11 +8,14 @@ import com.e.popularmoviesudacity.model.Movie;
 import java.util.List;
 
 public class mainActivityViewModel extends ViewModel {
-    private movieDataSource movieDataSource;
+
     private LiveData<List<Movie>> PopularmoviesLiveData;
 
+    private  movieDataSource movieDataSource = new movieDataSource();
+
     public mainActivityViewModel() {
-        movieDataSource = new movieDataSource();
+
+
         PopularmoviesLiveData = movieDataSource.getPopularMovies();
     }
 

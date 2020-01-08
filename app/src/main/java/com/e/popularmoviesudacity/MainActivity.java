@@ -1,5 +1,6 @@
 package com.e.popularmoviesudacity;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,7 +19,7 @@ import com.e.popularmoviesudacity.model.Movie;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements moviesAdapter.movieClickHandler {
     private RecyclerView mRecyclerView;
     private moviesAdapter moviesAdapter;
     private mainActivityViewModel mainActivityViewModel;
@@ -32,10 +33,11 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         mainActivityViewModel = ViewModelProviders.of(this).get(mainActivityViewModel.class);
+        moviesAdapter = new moviesAdapter(new ArrayList<Movie>());
         mRecyclerView = findViewById(R.id.movie_recycler);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this,2);
         mRecyclerView.setLayoutManager(gridLayoutManager);
-        moviesAdapter = new moviesAdapter(new ArrayList<Movie>());
+
         mRecyclerView.setAdapter(moviesAdapter);
 
         mainActivityViewModel.getPopularMoviesLiveData().observe(this, new Observer<List<Movie>>() {
@@ -80,5 +82,11 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onMovieClickListener(int position) {
+        
+
     }
 }
