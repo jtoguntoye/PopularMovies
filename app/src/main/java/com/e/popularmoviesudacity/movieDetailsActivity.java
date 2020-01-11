@@ -103,7 +103,7 @@ public class movieDetailsActivity extends AppCompatActivity  implements trailerA
                 .get(detailsViewModel.class);
 
      videosList = mDetailsActivityViewModel.getVideosList();
-     //Log.d("TRAILER TAG", String.valueOf(videosList.size()));
+     Log.d("DETAIL_TRAILER TAG", String.valueOf(videosList.size()));
      mTrailerAdapter.setVideosList(videosList);
 
 

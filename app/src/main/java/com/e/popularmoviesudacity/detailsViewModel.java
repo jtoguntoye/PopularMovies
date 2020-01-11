@@ -18,6 +18,7 @@ public class detailsViewModel extends ViewModel {
     public detailsViewModel(int movieID) {
         movieDataSource movieDataSource = new movieDataSource();
         videosList = movieDataSource.getMovieTrailers(movieID);
+        Log.d("MODEL TAG","VideoList size:"+(videosList.size()));
         //Log.d("TRAILERVIEWMODEL", String.valueOf(videosList.size()));
     }
 

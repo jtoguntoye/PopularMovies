@@ -79,7 +79,7 @@ public class movieDataSource {
                 public void onResponse(Call<videoResponse> call, Response<videoResponse> response) {
                     if (response.body()!=null){
                        videosList = response.body().getVideosList();
-                        Log.d("MOVIE TRAILER LIST SIZE", String.valueOf(videosList.size()));
+                        Log.d("SOURCE VIDEOLIST SIZE:", String.valueOf(videosList.size()));
 
 
                     }
