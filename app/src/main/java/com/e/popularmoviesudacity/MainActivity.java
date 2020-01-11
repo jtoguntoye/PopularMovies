@@ -10,7 +10,6 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -22,7 +21,8 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity implements moviesAdapter.movieClickHandler {
     private RecyclerView mRecyclerView;
     private moviesAdapter moviesAdapter;
-    private mainActivityViewModel mainActivityViewModel;
+
+    private List<Movie> mMovieList;
 
 
     @Override
@@ -32,8 +32,11 @@ public class MainActivity extends AppCompatActivity implements moviesAdapter.mov
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        mainActivityViewModel = ViewModelProviders.of(this).get(mainActivityViewModel.class);
-        moviesAdapter = new moviesAdapter(new ArrayList<Movie>());
+        mMovieList  = new ArrayList<>();
+        mainActivityViewModel mainActivityViewModel =
+           ViewModelProviders.of(this).get(com.e.popularmoviesudacity.mainActivityViewModel.class);
+
+        moviesAdapter = new moviesAdapter(new ArrayList<>(),this);
         mRecyclerView = findViewById(R.id.movie_recycler);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this,2);
         mRecyclerView.setLayoutManager(gridLayoutManager);
@@ -44,6 +47,7 @@ public class MainActivity extends AppCompatActivity implements moviesAdapter.mov
             @Override
             public void onChanged(List<Movie> movieList) {
                 moviesAdapter.setAdapterMovieList(movieList);
+                mMovieList= movieList;
             }
         });
         //getPopularMovieList();
@@ -51,16 +55,6 @@ public class MainActivity extends AppCompatActivity implements moviesAdapter.mov
     }
 
 
-    //helper method to get popular movies from repository
-   /*
-    private void getPopularMovieList(){
-        movieRepository.getPopularMovies().observe(this, new Observer<List<Movie>>() {
-            @Override
-            public void onChanged(List<Movie> movies) {
-                moviesAdapter.setAdapterMovieList(movies);
-             }});
-    }
-    */
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -86,7 +80,10 @@ public class MainActivity extends AppCompatActivity implements moviesAdapter.mov
 
     @Override
     public void onMovieClickListener(int position) {
-        
+        Intent moviesDetailsIntent = new Intent (this, movieDetailsActivity.class);
+        moviesDetailsIntent.putExtra(movieDetailsActivity.ParceledMovie, mMovieList.get(position));
+        startActivity(moviesDetailsIntent);
+
 
     }
 }

@@ -3,7 +3,7 @@ apply plugin: 'com.android.application'
 //load the apiKey file
 def apikeyPropertiesFile = rootProject.file("apikey.properties")
 def apikeyProperties = new Properties()
-    apikeyProperties.load(new FileInputStream(apikeyPropertiesFile))
+apikeyProperties.load(new FileInputStream(apikeyPropertiesFile))
 
 android {
 

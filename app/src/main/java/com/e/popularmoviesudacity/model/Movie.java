@@ -2,6 +2,7 @@ package com.e.popularmoviesudacity.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.widget.FrameLayout;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -10,11 +11,15 @@ import java.util.List;
 //class is made parcelable
 public class Movie implements Parcelable {
 
+
+    @SerializedName("vote_average")
+    private Float movieRating;
+
     @SerializedName("poster_path")
     private String moviePosterPath;
 
     @SerializedName("id")
-    private String id;
+    private int id;
 
     @SerializedName("title")
     private String title;
@@ -28,11 +33,14 @@ public class Movie implements Parcelable {
 
     protected Movie(Parcel in) {
         moviePosterPath = in.readString();
-        id = in.readString();
+        id = in.readInt();
         title = in.readString();
         movieOverview = in.readString();
         releaseDate = in.readString();
+        movieRating = in.readFloat();
     }
+
+
 
     //this inner class  helps to make the movies class re-creatable from a parcel
     public static final Creator<Movie> CREATOR = new Creator<Movie>() {
@@ -55,11 +63,11 @@ public class Movie implements Parcelable {
         this.moviePosterPath = moviePosterPath;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -71,7 +79,9 @@ public class Movie implements Parcelable {
         this.title = title;
     }
 
-
+    public Float getMovieRating() {
+        return movieRating;
+    }
 
     public String getMovieOverview() {
         return movieOverview;
@@ -97,10 +107,11 @@ public class Movie implements Parcelable {
     @Override
     public void writeToParcel(Parcel parcel, int i) {
     parcel.writeString(moviePosterPath);
-    parcel.writeString(id);
+    parcel.writeInt(id);
     parcel.writeString(title);
     parcel.writeString(movieOverview);
     parcel.writeString(releaseDate);
+    parcel.writeFloat(movieRating);
 
     }
 }

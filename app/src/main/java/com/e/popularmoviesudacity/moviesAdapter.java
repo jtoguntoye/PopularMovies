@@ -20,14 +20,14 @@ public class moviesAdapter extends RecyclerView.Adapter<moviesAdapter.movieViewH
     private List<Movie> movieList;
     private  movieClickHandler mClickHandler;
 
-    public moviesAdapter(List<Movie> movieList) {
+    public moviesAdapter(List<Movie> movieList, movieClickHandler clickHandler) {
         this.movieList = movieList;
+        mClickHandler = clickHandler;
     }
 
-    List<Movie> setAdapterMovieList(List<Movie> movieList){
+    void setAdapterMovieList(List<Movie> movieList){
         this.movieList = movieList;
         notifyDataSetChanged();
-        return this.movieList;
     }
 
     @NonNull
