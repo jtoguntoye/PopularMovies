@@ -13,9 +13,14 @@ public class detailsViewModelFactory implements ViewModelProvider.Factory {
         this.movieID = movieID;
     }
 
+
+    @SuppressWarnings("unchecked")
     @NonNull
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+        if(modelClass.isAssignableFrom(detailsViewModel.class)){
         return (T) new detailsViewModel(movieID);
+    }
+        throw new IllegalArgumentException("unknown viewModel class");
     }
 }

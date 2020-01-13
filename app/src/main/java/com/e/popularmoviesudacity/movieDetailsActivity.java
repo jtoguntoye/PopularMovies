@@ -37,7 +37,7 @@ public class movieDetailsActivity extends AppCompatActivity  implements trailerA
 
     private trailerAdapter mTrailerAdapter;
     private List<Videos> videosList;
-    private  movieDataSource movieDataSource;
+   // private  movieDataSource movieDataSource;
     public static final String ParceledMovie = "com.e.popularmovies.PARCELED_MOVIE";
 
     @Override
@@ -48,7 +48,7 @@ public class movieDetailsActivity extends AppCompatActivity  implements trailerA
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
-    movieDataSource= new movieDataSource();
+    //movieDataSource= new movieDataSource();
 
         videosList = new ArrayList<>();
         mTrailerAdapter = new trailerAdapter(new ArrayList<>(), this);
@@ -64,7 +64,7 @@ public class movieDetailsActivity extends AppCompatActivity  implements trailerA
 
         readMoviesDetails();
 
-
+        getMovieTrailerKeys(movieID);
     }
 
 
@@ -78,7 +78,6 @@ public class movieDetailsActivity extends AppCompatActivity  implements trailerA
             movieYear.setText(mMovie.getReleaseDate().split("-")[0]);
             movieRating.setText(String.valueOf(mMovie.getMovieRating()));
             movieID = mMovie.getId();
-            getMovieTrailerKeys(movieID);
             posterPath = mMovie.getMoviePosterPath();
             movieOverview.setText(mMovie.getMovieOverview());
 
@@ -100,10 +99,14 @@ public class movieDetailsActivity extends AppCompatActivity  implements trailerA
         detailsViewModelFactory factory = new detailsViewModelFactory(movieID);
      //get the viewModel class for the Details Activity to get the trailers for each movie
      detailsViewModel mDetailsActivityViewModel = ViewModelProviders.of(this, factory)
-                .get(detailsViewModel.class);
+              .get(detailsViewModel.class);
 
-     videosList = mDetailsActivityViewModel.getVideosList();
-     Log.d("DETAIL_TRAILER TAG", String.valueOf(videosList.size()));
+     mDetailsActivityViewModel.getVideosList().observe(this, (List<Videos> videos) -> {
+         mTrailerAdapter.setVideosList(videos);
+         videosList= videos;
+     });
+
+    Log.d("DETAIL_TRAILER TAG", "size is:"+videosList.size());
      mTrailerAdapter.setVideosList(videosList);
 
 
@@ -112,7 +115,7 @@ public class movieDetailsActivity extends AppCompatActivity  implements trailerA
     @Override
     public void onMovieClickListener(int position) {
         Intent trailerPlayIntent  = new Intent (Intent.ACTION_VIEW,
-                Uri.parse(YOU_TUBE_BASE_URL +videosList.get(position)));
+                Uri.parse(YOU_TUBE_BASE_URL +videosList.get(position).getKey()));
 
         try {
             startActivity(trailerPlayIntent);

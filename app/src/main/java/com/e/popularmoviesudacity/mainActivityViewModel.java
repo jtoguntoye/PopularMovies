@@ -13,10 +13,10 @@ import java.util.List;
 public class mainActivityViewModel extends ViewModel {
 
     private LiveData<List<Movie>> popularMoviesLiveData;
-    private  movieDataSource movieDataSource = new movieDataSource();
 
     public mainActivityViewModel() {
 //PopularmoviesLiveData = new MutableLiveData<>();
+        movieDataSource movieDataSource = new movieDataSource();
         popularMoviesLiveData = movieDataSource.getPopularMovies();
     }
 

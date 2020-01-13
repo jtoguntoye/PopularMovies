@@ -27,14 +27,14 @@ import static com.e.popularmoviesudacity.Retrofit.retrofitInstance.getRetrofitIn
 //class to get the movies from the API using retrofit
 public class movieDataSource {
 
-    private List<Videos> videosList;
+    private MutableLiveData<List<Videos>> videosList;
     private TmdbInterface tmdbInterface;
     private MutableLiveData<List<Movie>> popularMoviesList;
 
     public movieDataSource() {
         popularMoviesList = new MutableLiveData<>();
         tmdbInterface = getRetrofitInstance();
-
+        videosList = new MutableLiveData<>();
     }
     //helper method to get list of populatr movies
     public LiveData<List<Movie>> getPopularMovies(){
@@ -68,7 +68,7 @@ public class movieDataSource {
     }
 
         //helper method to get movie trailers
-        public  List<Videos> getMovieTrailers(int movieId){
+        public  LiveData<List<Videos>> getMovieTrailers(int movieId){
 
             Call<videoResponse> videoResponseCall = tmdbInterface.getVideo(
                     movieId,
@@ -78,9 +78,9 @@ public class movieDataSource {
                 @Override
                 public void onResponse(Call<videoResponse> call, Response<videoResponse> response) {
                     if (response.body()!=null){
-                       videosList = response.body().getVideosList();
-                        Log.d("SOURCE VIDEOLIST SIZE:", String.valueOf(videosList.size()));
-
+                       videosList.postValue(response.body().getVideosList());
+                      Log.d("SOURCE VIDEOLIST SIZE:",
+                              "size is:"+response.body().getVideosList().size());
 
                     }
                 }
@@ -90,8 +90,6 @@ public class movieDataSource {
 
                 }
             });
-
-
 
             return videosList;
     }

@@ -1,5 +1,6 @@
 package com.e.popularmoviesudacity;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +28,7 @@ public class trailerAdapter extends RecyclerView.Adapter<trailerAdapter.trailerV
     void setVideosList(List<Videos> videosList){
         this.videosList = videosList;
         notifyDataSetChanged();
+        Log.d("TRAILER ADAPTERTAG","size is"+videosList.size());
     }
 
     @NonNull

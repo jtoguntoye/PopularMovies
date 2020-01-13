@@ -43,12 +43,9 @@ public class MainActivity extends AppCompatActivity implements moviesAdapter.mov
 
         mRecyclerView.setAdapter(moviesAdapter);
 
-        mainActivityViewModel.getPopularMoviesLiveData().observe(this, new Observer<List<Movie>>() {
-            @Override
-            public void onChanged(List<Movie> movieList) {
-                moviesAdapter.setAdapterMovieList(movieList);
-                mMovieList= movieList;
-            }
+        mainActivityViewModel.getPopularMoviesLiveData().observe(this, movieList -> {
+            moviesAdapter.setAdapterMovieList(movieList);
+            mMovieList= movieList;
         });
         //getPopularMovieList();
 
