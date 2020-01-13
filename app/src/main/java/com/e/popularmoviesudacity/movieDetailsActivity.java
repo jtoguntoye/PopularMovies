@@ -106,7 +106,6 @@ public class movieDetailsActivity extends AppCompatActivity  implements trailerA
          videosList= videos;
      });
 
-    Log.d("DETAIL_TRAILER TAG", "size is:"+videosList.size());
      mTrailerAdapter.setVideosList(videosList);
 
 
