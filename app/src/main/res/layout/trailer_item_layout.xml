@@ -22,7 +22,7 @@
             android:id="@+id/playIcon"
             android:layout_width="74dp"
             android:layout_height="25dp"
-            android:src="@drawable/music_and_multimedia" />
+            android:src="@drawable/ic_play_arrow_24px" />
 
 
     <TextView
