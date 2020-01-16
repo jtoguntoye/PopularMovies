@@ -13,6 +13,7 @@ import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Switch;
@@ -62,6 +63,7 @@ public class MainActivity extends AppCompatActivity implements moviesAdapter.mov
                 mainActivityViewModel.getPopularMoviesLiveData().observe(this, movieList -> {
                     moviesAdapter.setAdapterMovieList(movieList);
                     mMovieList= movieList;
+                    Log.d("MAIN POPULAR", String.valueOf((movieList.size())));
                 });
                 break;
 
@@ -70,6 +72,7 @@ public class MainActivity extends AppCompatActivity implements moviesAdapter.mov
                 mainActivityViewModel.getTopRatedList().observe(this, movieList -> {
                     moviesAdapter.setAdapterMovieList(movieList);
                     mMovieList=movieList;
+                    Log.d("MAIN RATED", String.valueOf(movieList.size()));
                 });
                 break;
         }
