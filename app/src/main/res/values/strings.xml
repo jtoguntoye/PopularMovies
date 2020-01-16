@@ -4,4 +4,11 @@
     <string name="movie_thumbnail">Movie thumbnail</string>
     <string name="Tmdb_api_key">YOUR-TMDB-API-KEY</string>
     <string name="title_activity_movie_details">movieDetails</string>
+    <string name="sort_by">Sort By</string>
+    <string name="sort_order">sort order</string>
+    <string name="most_popular">Most Popular</string>
+    <string name="most_rated">Highest Rated</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

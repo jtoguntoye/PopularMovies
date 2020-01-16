@@ -13,17 +13,21 @@ import java.util.List;
 public class mainActivityViewModel extends ViewModel {
 
     private LiveData<List<Movie>> popularMoviesLiveData;
+    private LiveData<List<Movie>> topRatedList;
 
     public mainActivityViewModel() {
 //PopularmoviesLiveData = new MutableLiveData<>();
         movieDataSource movieDataSource = new movieDataSource();
         popularMoviesLiveData = movieDataSource.getPopularMovies();
+        topRatedList = movieDataSource.getTopRated();
     }
 
 
-        public LiveData<List<Movie>> getPopularMoviesLiveData(){
+        LiveData<List<Movie>> getPopularMoviesLiveData(){
         return popularMoviesLiveData;
         }
 
+
+        LiveData<List<Movie>> getTopRatedList(){return topRatedList;}
 
 }

@@ -31,14 +31,17 @@ public class movieDataSource {
     private TmdbInterface tmdbInterface;
     private MutableLiveData<List<Movie>> popularMoviesList;
 
+    //mutableLiveData to hold highest rated movies
+    private MutableLiveData<List<Movie>> topRatedMovieList;
+
     public movieDataSource() {
         popularMoviesList = new MutableLiveData<>();
+        topRatedMovieList = new MutableLiveData<>();
         tmdbInterface = getRetrofitInstance();
         videosList = new MutableLiveData<>();
     }
-    //helper method to get list of populatr movies
+    //helper method to get list of popular movies
     public LiveData<List<Movie>> getPopularMovies(){
-
      Call<MovieResponse> popularMoviesCall =
       tmdbInterface.getPopularMovies(BuildConfig.TMDB_API_KEY); //add your TMDB apiKey here
 
@@ -66,6 +69,38 @@ public class movieDataSource {
      });
     return popularMoviesList;
     }
+
+
+
+        //helper method to get top rated movies
+        public LiveData<List<Movie>> getTopRated(){
+
+        Call<MovieResponse> topRatedMoviesCall =
+                tmdbInterface.getTopRated(BuildConfig.TMDB_API_KEY);
+
+        topRatedMoviesCall.enqueue(new Callback<MovieResponse>() {
+            @Override
+            public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response) {
+                if(response.body()!= null){
+                    topRatedMovieList.postValue(response.body().getMovies());
+                }
+
+                else {Log.d("TOPRATED", "Response is null");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<MovieResponse> call, Throwable t) {
+                t.printStackTrace();
+
+            }
+        });
+
+    return topRatedMovieList;
+    }
+
+
+
 
         //helper method to get movie trailers
         public  LiveData<List<Videos>> getMovieTrailers(int movieId){

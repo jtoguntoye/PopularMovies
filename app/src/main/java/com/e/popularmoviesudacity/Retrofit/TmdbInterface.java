@@ -21,4 +21,9 @@ public interface TmdbInterface {
             @Path("movie_id") int movieID,
             @Query("api_key") String apiKey
     );
+
+    @GET("movie/top_rated")
+    Call<MovieResponse> getTopRated(
+            @Query("api_key") String apiKey
+    );
 }
