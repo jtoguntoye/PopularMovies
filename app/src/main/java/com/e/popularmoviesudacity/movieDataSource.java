@@ -83,6 +83,7 @@ public class movieDataSource {
             public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response) {
                 if(response.body()!= null){
                     topRatedMovieList.postValue(response.body().getMovies());
+                    Log.d("TOPRATED-SOURCE", "SIZE:"+ response.body().getMovies().size());
                 }
 
                 else {Log.d("TOPRATED", "Response is null");

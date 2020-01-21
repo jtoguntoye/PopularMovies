@@ -19,7 +19,7 @@ android {
         buildConfigField("String", "TMDB_API_KEY", apikeyProperties['TMDB-API-KEY'])
 
         applicationId "com.e.popularmoviesudacity"
-        minSdkVersion 23
+        minSdkVersion 19
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"

@@ -23,11 +23,15 @@ import com.e.popularmoviesudacity.model.Movie;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements moviesAdapter.movieClickHandler {
+public class MainActivity extends AppCompatActivity implements moviesAdapter.movieClickHandler,
+        SharedPreferences.OnSharedPreferenceChangeListener
+{
     private RecyclerView mRecyclerView;
     private moviesAdapter moviesAdapter;
 
     private List<Movie> mMovieList;
+    private com.e.popularmoviesudacity.mainActivityViewModel mainActivityViewModel;
+    private SharedPreferences sharedPref;
 
 
     @Override
@@ -39,8 +43,8 @@ public class MainActivity extends AppCompatActivity implements moviesAdapter.mov
 
 
         mMovieList  = new ArrayList<>();
-        mainActivityViewModel mainActivityViewModel =
-           ViewModelProviders.of(this).get(com.e.popularmoviesudacity.mainActivityViewModel.class);
+        mainActivityViewModel =
+                ViewModelProviders.of(this).get(com.e.popularmoviesudacity.mainActivityViewModel.class);
 
         moviesAdapter = new moviesAdapter(new ArrayList<>(),this);
         mRecyclerView = findViewById(R.id.movie_recycler);
@@ -49,16 +53,29 @@ public class MainActivity extends AppCompatActivity implements moviesAdapter.mov
 
         mRecyclerView.setAdapter(moviesAdapter);
 
-        //set up shared preferences default value
-       PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+        setUpSharedPreferences();
 
+
+    }
+
+
+    //helper method to set up sharedPrefereces
+    private void setUpSharedPreferences(){
+        //set up shared preferences default value
+        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
         //get sharedPreference
-        SharedPreferences sharedPref =  PreferenceManager.getDefaultSharedPreferences(this);
-        String listPref = sharedPref.getString( SettingsActivity.KEY_PREF_SORT_ORDER,
+        sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        loadMoviesWithPreferences(sharedPref);
+        sharedPref.registerOnSharedPreferenceChangeListener(this);
+    }
+
+
+    // helper method to load movies with user's preferences
+    private void loadMoviesWithPreferences(SharedPreferences preferences){
+        String listPref = preferences.getString( SettingsActivity.KEY_PREF_SORT_ORDER,
                 getString(R.string.most_popular));
 
         switch(listPref){
-
             case "Most Popular" :
                 mainActivityViewModel.getPopularMoviesLiveData().observe(this, movieList -> {
                     moviesAdapter.setAdapterMovieList(movieList);
@@ -66,8 +83,6 @@ public class MainActivity extends AppCompatActivity implements moviesAdapter.mov
                     Log.d("MAIN POPULAR", String.valueOf((movieList.size())));
                 });
                 break;
-
-
             case "Highest Rated":
                 mainActivityViewModel.getTopRatedList().observe(this, movieList -> {
                     moviesAdapter.setAdapterMovieList(movieList);
@@ -76,12 +91,7 @@ public class MainActivity extends AppCompatActivity implements moviesAdapter.mov
                 });
                 break;
         }
-
-
     }
-
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -106,6 +116,7 @@ public class MainActivity extends AppCompatActivity implements moviesAdapter.mov
         return super.onOptionsItemSelected(item);
     }
 
+    //item clickListener callback method implementation
     @Override
     public void onMovieClickListener(int position) {
         Intent moviesDetailsIntent = new Intent (this, movieDetailsActivity.class);
@@ -113,5 +124,21 @@ public class MainActivity extends AppCompatActivity implements moviesAdapter.mov
         startActivity(moviesDetailsIntent);
 
 
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
+        if( s.equals(SettingsActivity.KEY_PREF_SORT_ORDER)){
+        loadMoviesWithPreferences(sharedPreferences);
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        //unregister the mainActivity as an onPreferenceChangeListener
+        PreferenceManager.getDefaultSharedPreferences(this)
+                .unregisterOnSharedPreferenceChangeListener(this);
     }
 }

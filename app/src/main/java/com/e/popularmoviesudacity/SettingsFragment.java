@@ -20,7 +20,8 @@ import android.widget.TextView;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class SettingsFragment extends PreferenceFragmentCompat   {
+public class SettingsFragment extends PreferenceFragmentCompat implements
+        SharedPreferences.OnSharedPreferenceChangeListener {
 
 
     @Override
@@ -49,7 +50,6 @@ public class SettingsFragment extends PreferenceFragmentCompat   {
 
     private void setPreferenceSummary(Preference p, String value) {
 
-
         ListPreference listPreference = (ListPreference) p;
         int prefIndex = listPreference.findIndexOfValue(value);
         if (prefIndex >= 0) {
@@ -59,4 +59,30 @@ public class SettingsFragment extends PreferenceFragmentCompat   {
 
     }
 
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
+        //get the preference changed
+        Preference preference = findPreference(s);
+        String value = sharedPreferences.getString(preference.getKey(), "");
+        setPreferenceSummary(preference, value);
+
+    }
+
+
+    // COMPLETED (5) Register and unregister the OnSharedPreferenceChange listener (this class) in
+    // onCreate and onDestroy respectively.
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        getPreferenceScreen().getSharedPreferences()
+                .registerOnSharedPreferenceChangeListener(this);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        getPreferenceScreen().getSharedPreferences()
+                .unregisterOnSharedPreferenceChangeListener(this);
+    }
 }

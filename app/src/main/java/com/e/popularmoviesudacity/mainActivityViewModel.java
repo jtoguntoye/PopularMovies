@@ -14,20 +14,22 @@ public class mainActivityViewModel extends ViewModel {
 
     private LiveData<List<Movie>> popularMoviesLiveData;
     private LiveData<List<Movie>> topRatedList;
+    private final com.e.popularmoviesudacity.movieDataSource movieDataSource;
 
     public mainActivityViewModel() {
 //PopularmoviesLiveData = new MutableLiveData<>();
-        movieDataSource movieDataSource = new movieDataSource();
-        popularMoviesLiveData = movieDataSource.getPopularMovies();
-        topRatedList = movieDataSource.getTopRated();
+        movieDataSource = new movieDataSource();
+
     }
 
 
         LiveData<List<Movie>> getPopularMoviesLiveData(){
-        return popularMoviesLiveData;
+        return movieDataSource.getPopularMovies();
         }
 
 
-        LiveData<List<Movie>> getTopRatedList(){return topRatedList;}
+        LiveData<List<Movie>> getTopRatedList(){
+        return movieDataSource.getTopRated();
+    }
 
 }
