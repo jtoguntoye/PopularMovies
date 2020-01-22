@@ -6,17 +6,15 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.preference.Preference;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Switch;
 
 import com.e.popularmoviesudacity.model.Movie;
 
@@ -48,7 +46,9 @@ public class MainActivity extends AppCompatActivity implements moviesAdapter.mov
 
         moviesAdapter = new moviesAdapter(new ArrayList<>(),this);
         mRecyclerView = findViewById(R.id.movie_recycler);
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(this,2);
+
+        //setting the gridLayout column programmatically
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, numOfColumns());
         mRecyclerView.setLayoutManager(gridLayoutManager);
 
         mRecyclerView.setAdapter(moviesAdapter);
@@ -56,6 +56,18 @@ public class MainActivity extends AppCompatActivity implements moviesAdapter.mov
         setUpSharedPreferences();
 
 
+    }
+
+    //helper method to determine the grid width
+    private int numOfColumns() {
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int widthDivider = 400;
+        int width = displayMetrics.widthPixels;
+        int numColumns = width/widthDivider;
+        if(numColumns < 2)return 2;
+
+        return numColumns;
     }
 
 
