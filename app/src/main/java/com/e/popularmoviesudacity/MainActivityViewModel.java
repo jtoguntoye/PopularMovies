@@ -1,23 +1,21 @@
 package com.e.popularmoviesudacity;
 
-import android.util.Log;
+
 
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
+
 import androidx.lifecycle.ViewModel;
 
 import com.e.popularmoviesudacity.model.Movie;
 
 import java.util.List;
 
-public class mainActivityViewModel extends ViewModel {
+public class MainActivityViewModel extends ViewModel {
 
-    private LiveData<List<Movie>> popularMoviesLiveData;
-    private LiveData<List<Movie>> topRatedList;
+
     private final com.e.popularmoviesudacity.movieDataSource movieDataSource;
 
-    public mainActivityViewModel() {
-//PopularmoviesLiveData = new MutableLiveData<>();
+    public MainActivityViewModel() {
         movieDataSource = new movieDataSource();
 
     }

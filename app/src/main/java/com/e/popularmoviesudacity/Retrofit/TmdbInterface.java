@@ -1,6 +1,7 @@
 package com.e.popularmoviesudacity.Retrofit;
 
 import com.e.popularmoviesudacity.model.MovieResponse;
+import com.e.popularmoviesudacity.model.ReviewResponse;
 import com.e.popularmoviesudacity.model.videoResponse;
 
 import retrofit2.Call;
@@ -25,5 +26,11 @@ public interface TmdbInterface {
     @GET("movie/top_rated")
     Call<MovieResponse> getTopRated(
             @Query("api_key") String apiKey
+    );
+
+    @GET("movie/{movie_id}/reviews")
+    Call<ReviewResponse> getReviews(
+            @Path("movie_id") int movieID,
+            @Query("api_key") String  apiKey
     );
 }

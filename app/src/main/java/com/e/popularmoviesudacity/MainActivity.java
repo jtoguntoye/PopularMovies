@@ -21,14 +21,13 @@ import com.e.popularmoviesudacity.model.Movie;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements moviesAdapter.movieClickHandler,
-        SharedPreferences.OnSharedPreferenceChangeListener
-{
+public class MainActivity extends AppCompatActivity implements MoviesAdapter.movieClickHandler,
+        SharedPreferences.OnSharedPreferenceChangeListener {
     private RecyclerView mRecyclerView;
-    private moviesAdapter moviesAdapter;
+    private MoviesAdapter moviesAdapter;
 
     private List<Movie> mMovieList;
-    private com.e.popularmoviesudacity.mainActivityViewModel mainActivityViewModel;
+    private MainActivityViewModel mainActivityViewModel;
     private SharedPreferences sharedPref;
 
 
@@ -42,9 +41,10 @@ public class MainActivity extends AppCompatActivity implements moviesAdapter.mov
 
         mMovieList  = new ArrayList<>();
         mainActivityViewModel =
-                ViewModelProviders.of(this).get(com.e.popularmoviesudacity.mainActivityViewModel.class);
+                ViewModelProviders.of(this)
+                        .get(MainActivityViewModel.class);
 
-        moviesAdapter = new moviesAdapter(new ArrayList<>(),this);
+        moviesAdapter = new MoviesAdapter(new ArrayList<>(),this);
         mRecyclerView = findViewById(R.id.movie_recycler);
 
         //setting the gridLayout column programmatically
@@ -111,6 +111,7 @@ public class MainActivity extends AppCompatActivity implements moviesAdapter.mov
         return true;
     }
 
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -131,8 +132,8 @@ public class MainActivity extends AppCompatActivity implements moviesAdapter.mov
     //item clickListener callback method implementation
     @Override
     public void onMovieClickListener(int position) {
-        Intent moviesDetailsIntent = new Intent (this, movieDetailsActivity.class);
-        moviesDetailsIntent.putExtra(movieDetailsActivity.ParceledMovie, mMovieList.get(position));
+        Intent moviesDetailsIntent = new Intent (this, MovieDetailsActivity.class);
+        moviesDetailsIntent.putExtra(MovieDetailsActivity.ParceledMovie, mMovieList.get(position));
         startActivity(moviesDetailsIntent);
 
 

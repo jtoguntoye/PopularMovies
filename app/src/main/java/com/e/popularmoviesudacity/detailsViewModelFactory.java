@@ -18,8 +18,8 @@ public class detailsViewModelFactory implements ViewModelProvider.Factory {
     @NonNull
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-        if(modelClass.isAssignableFrom(detailsViewModel.class)){
-        return (T) new detailsViewModel(movieID);
+        if(modelClass.isAssignableFrom(DetailsViewModel.class)){
+        return (T) new DetailsViewModel(movieID);
     }
         throw new IllegalArgumentException("unknown viewModel class");
     }

@@ -14,13 +14,13 @@ import com.e.popularmoviesudacity.model.Videos;
 import java.util.List;
 
 //trailer adapter with support for trailer click to open video in a browser
-public class trailerAdapter extends RecyclerView.Adapter<trailerAdapter.trailerViewHolder> {
+public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.trailerViewHolder> {
 
     private List<Videos> videosList;
     private TextView trailerName;
     private trailerClickHandler mTrailerClickHandler;
 
-    public trailerAdapter(List<Videos> videos, trailerClickHandler trailerClickHandler) {
+    public TrailerAdapter(List<Videos> videos, trailerClickHandler trailerClickHandler) {
         videosList = videos;
         mTrailerClickHandler  = trailerClickHandler;
     }
@@ -33,7 +33,7 @@ public class trailerAdapter extends RecyclerView.Adapter<trailerAdapter.trailerV
 
     @NonNull
     @Override
-    public trailerAdapter.trailerViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
+    public TrailerAdapter.trailerViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
     {
 //inflate the list_item layout here
         View itemView = LayoutInflater.from(parent.getContext())
@@ -73,8 +73,8 @@ public class trailerAdapter extends RecyclerView.Adapter<trailerAdapter.trailerV
 
         }
 
-        public void bind(Videos videos){
-            trailerName.setText(videos.getName());
+        private void bind(Videos video){
+            trailerName.setText(video.getName());
 
         }
     }

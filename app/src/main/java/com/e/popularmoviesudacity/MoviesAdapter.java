@@ -15,12 +15,12 @@ import com.e.popularmoviesudacity.model.Movie;
 
 import java.util.List;
 
-public class moviesAdapter extends RecyclerView.Adapter<moviesAdapter.movieViewHolder> {
+public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.movieViewHolder> {
 
     private List<Movie> movieList;
     private  movieClickHandler mClickHandler;
 
-    public moviesAdapter(List<Movie> movieList, movieClickHandler clickHandler) {
+    public MoviesAdapter(List<Movie> movieList, movieClickHandler clickHandler) {
         this.movieList = movieList;
         mClickHandler = clickHandler;
     }

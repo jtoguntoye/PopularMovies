@@ -8,10 +8,12 @@ import android.os.Bundle;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.e.popularmoviesudacity.model.Movie;
+import com.e.popularmoviesudacity.model.Reviews;
 import com.e.popularmoviesudacity.model.Videos;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -24,10 +26,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class movieDetailsActivity extends AppCompatActivity  implements trailerAdapter.trailerClickHandler{
+public class MovieDetailsActivity extends AppCompatActivity  implements TrailerAdapter.trailerClickHandler{
 
     private TextView movieTitle, movieYear, movieRating, movieOverview;
-    private RecyclerView tralerRecyclerView;
+    private RecyclerView trailerRecyclerView, reviewRecyclerview;
     private String posterPath;
     private String IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w185";
     private String YOU_TUBE_BASE_URL = "https://www.youtube.com/watch?v=";
@@ -35,10 +37,16 @@ public class movieDetailsActivity extends AppCompatActivity  implements trailerA
     private Movie mMovie;
     private int movieID;
 
-    private trailerAdapter mTrailerAdapter;
+    private TrailerAdapter mTrailerAdapter;
     private List<Videos> videosList;
+
+    private ReviewAdapter mReviewAdapter;
+    private List<Reviews> reviewList;
+
    // private  movieDataSource movieDataSource;
     public static final String ParceledMovie = "com.e.popularmovies.PARCELED_MOVIE";
+    private detailsViewModelFactory factory;
+    private DetailsViewModel mDetailsActivityViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,23 +56,37 @@ public class movieDetailsActivity extends AppCompatActivity  implements trailerA
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
-    //movieDataSource= new movieDataSource();
+
 
         videosList = new ArrayList<>();
-        mTrailerAdapter = new trailerAdapter(new ArrayList<>(), this);
+        mTrailerAdapter = new TrailerAdapter(new ArrayList<>(), this);
+
+        reviewList = new ArrayList<>();
+        mReviewAdapter = new ReviewAdapter(new ArrayList<>());
+
         moviePoster = findViewById(R.id.detail_movie_poster);
         movieTitle = findViewById(R.id.detail_movie_title);
         movieYear = findViewById(R.id.release_year);
         movieRating = findViewById(R.id.movie_rating);
         movieOverview = findViewById(R.id.movie_overview);
-        tralerRecyclerView = findViewById(R.id.trailer_recycler_View);
+        trailerRecyclerView = findViewById(R.id.trailer_recycler_View);
+        reviewRecyclerview = findViewById(R.id.review_recycler_view);
 
-        tralerRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        tralerRecyclerView.setAdapter(mTrailerAdapter);
+        trailerRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        trailerRecyclerView.setAdapter(mTrailerAdapter);
+
+        reviewRecyclerview.setLayoutManager(new LinearLayoutManager(this));
+        reviewRecyclerview.setAdapter(mReviewAdapter);
 
         readMoviesDetails();
 
-        getMovieTrailerKeys(movieID);
+      //get the viewModel class for the Details Activity to get the trailers and reviews for each movie
+        factory = new detailsViewModelFactory(movieID);
+        mDetailsActivityViewModel = ViewModelProviders.of(this, factory)
+                .get(DetailsViewModel.class);
+
+        getMovieTrailerKeys();
+        getMovieReviews();
     }
 
 
@@ -83,7 +105,7 @@ public class movieDetailsActivity extends AppCompatActivity  implements trailerA
 
 
             Glide.with(this)
-                 .load(IMAGE_BASE_URL +mMovie.getMoviePosterPath())
+                 .load(IMAGE_BASE_URL +posterPath)
                     .apply(RequestOptions.placeholderOf(R.color.colorPrimary))
                     .into(moviePoster);
 
@@ -94,23 +116,26 @@ public class movieDetailsActivity extends AppCompatActivity  implements trailerA
     }
 
     //helper method to get movieTrailer keys from TMDB API
-    private void getMovieTrailerKeys(int movieID) {
-
-        detailsViewModelFactory factory = new detailsViewModelFactory(movieID);
-     //get the viewModel class for the Details Activity to get the trailers for each movie
-     detailsViewModel mDetailsActivityViewModel = ViewModelProviders.of(this, factory)
-              .get(detailsViewModel.class);
+    private void getMovieTrailerKeys() {
 
      mDetailsActivityViewModel.getVideosList().observe(this, (List<Videos> videos) -> {
          mTrailerAdapter.setVideosList(videos);
          videosList= videos;
      });
 
-     mTrailerAdapter.setVideosList(videosList);
-
 
     }
 
+    //helper method to get the movie reviews
+    private void getMovieReviews(){
+        mDetailsActivityViewModel.getReviewList().observe(this, reviews -> {
+           mReviewAdapter.setReviewsList(reviews);
+            reviewList = reviews;
+        });
+    }
+
+
+    //implementing onClickListener for trailer item selection
     @Override
     public void onMovieClickListener(int position) {
         Intent trailerPlayIntent  = new Intent (Intent.ACTION_VIEW,
