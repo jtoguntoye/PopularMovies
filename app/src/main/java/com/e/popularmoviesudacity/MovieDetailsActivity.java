@@ -2,6 +2,7 @@ package com.e.popularmoviesudacity;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -19,6 +20,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -36,12 +39,18 @@ public class MovieDetailsActivity extends AppCompatActivity  implements TrailerA
     private ImageView moviePoster;
     private Movie mMovie;
     private int movieID;
+    private ImageButton favoriteButton;
+
+    //initializing the favorites boolean to false
+    private Boolean isFavorites =false;
 
     private TrailerAdapter mTrailerAdapter;
     private List<Videos> videosList;
 
+    private List<Movie> favoriteList;
+
     private ReviewAdapter mReviewAdapter;
-    private List<Reviews> reviewList;
+
 
    // private  movieDataSource movieDataSource;
     public static final String ParceledMovie = "com.e.popularmovies.PARCELED_MOVIE";
@@ -57,11 +66,11 @@ public class MovieDetailsActivity extends AppCompatActivity  implements TrailerA
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
 
-
+        favoriteList = new ArrayList<>();
         videosList = new ArrayList<>();
         mTrailerAdapter = new TrailerAdapter(new ArrayList<>(), this);
 
-        reviewList = new ArrayList<>();
+
         mReviewAdapter = new ReviewAdapter(new ArrayList<>());
 
         moviePoster = findViewById(R.id.detail_movie_poster);
@@ -71,6 +80,8 @@ public class MovieDetailsActivity extends AppCompatActivity  implements TrailerA
         movieOverview = findViewById(R.id.movie_overview);
         trailerRecyclerView = findViewById(R.id.trailer_recycler_View);
         reviewRecyclerview = findViewById(R.id.review_recycler_view);
+
+        favoriteButton= findViewById(R.id.favorite_button);
 
         trailerRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         trailerRecyclerView.setAdapter(mTrailerAdapter);
@@ -87,8 +98,32 @@ public class MovieDetailsActivity extends AppCompatActivity  implements TrailerA
 
         getMovieTrailerKeys();
         getMovieReviews();
+
+        addToFavorites();
+
     }
 
+    private void addToFavorites() {
+
+        favoriteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+            if(!isFavorites){
+            favoriteList.add(mMovie);
+            Log.d("favorites size:","size is:"+favoriteList.size());
+                Log.d("movie Added:", mMovie.getTitle());
+                favoriteButton.setImageResource(R.drawable.ic_star_24px);
+                isFavorites =true;
+            }
+            else if(isFavorites){
+                favoriteList.remove(mMovie);
+                Log.d("movie Removed:", mMovie.getTitle());
+                favoriteButton.setImageResource(R.drawable.ic_star_border_24px);
+                isFavorites =false;
+            }
+            }
+        });
+    }
 
 
     //helper method to get the movie details and populate the child views and also get the videolist
@@ -130,7 +165,7 @@ public class MovieDetailsActivity extends AppCompatActivity  implements TrailerA
     private void getMovieReviews(){
         mDetailsActivityViewModel.getReviewList().observe(this, reviews -> {
            mReviewAdapter.setReviewsList(reviews);
-            reviewList = reviews;
+
         });
     }
 

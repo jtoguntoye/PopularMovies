@@ -17,6 +17,7 @@
 
 
         <TextView
+            android:textColor="@color/color_movie_title"
             android:textSize="@dimen/detail_title_text_size"
             android:id="@+id/detail_movie_title"
             android:layout_width="match_parent"
@@ -61,11 +62,12 @@
             android:layout_width="@dimen/match_constraint"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/detail_rating_margin_start"
-            android:layout_marginTop="@dimen/detail_rating_margin_top"
-            tools:text="TextView"
+            android:layout_marginTop="20dp"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toEndOf="@+id/detail_movie_poster"
-            app:layout_constraintTop_toBottomOf="@+id/release_year" />
+            app:layout_constraintTop_toBottomOf="@+id/release_year"
+            tools:text="TextView" />
 
         <TextView
             android:id="@+id/movie_overview"
@@ -124,6 +126,20 @@
             android:layout_height="wrap_content">
 
         </androidx.recyclerview.widget.RecyclerView>
+
+        <ImageButton
+            android:id="@+id/favorite_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/favorite_star_margin_start"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="@dimen/favorite_star_margin_end"
+            android:contentDescription="Add to or remove movie from favorite"
+            android:src="@drawable/ic_star_border_24px"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.005"
+            app:layout_constraintStart_toEndOf="@+id/detail_movie_poster"
+            app:layout_constraintTop_toBottomOf="@+id/movie_rating" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
