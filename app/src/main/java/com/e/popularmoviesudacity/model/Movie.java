@@ -4,13 +4,25 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.widget.FrameLayout;
 
+import androidx.annotation.NonNull;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 //class that represents each movie that is parsed from the TMDB API response
 //class is made parcelable
+@Entity(tableName = "favorites_table")
 public class Movie implements Parcelable {
 
+    public Movie() {
+    }
+
+    @PrimaryKey
+    @NonNull
+    @SerializedName("id")
+    private int id;
 
     @SerializedName("vote_average")
     private Float movieRating;
@@ -18,8 +30,6 @@ public class Movie implements Parcelable {
     @SerializedName("poster_path")
     private String moviePosterPath;
 
-    @SerializedName("id")
-    private int id;
 
     @SerializedName("title")
     private String title;
@@ -55,6 +65,8 @@ public class Movie implements Parcelable {
         }
     };
 
+
+
     public String getMoviePosterPath() {
         return moviePosterPath;
     }
@@ -81,6 +93,10 @@ public class Movie implements Parcelable {
 
     public Float getMovieRating() {
         return movieRating;
+    }
+
+    public void setMovieRating(Float movieRating) {
+        this.movieRating = movieRating;
     }
 
     public String getMovieOverview() {

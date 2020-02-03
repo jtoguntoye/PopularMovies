@@ -2,19 +2,16 @@ package com.e.popularmoviesudacity;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.e.popularmoviesudacity.model.Movie;
-import com.e.popularmoviesudacity.model.Reviews;
 import com.e.popularmoviesudacity.model.Videos;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -42,12 +39,12 @@ public class MovieDetailsActivity extends AppCompatActivity  implements TrailerA
     private ImageButton favoriteButton;
 
     //initializing the favorites boolean to false
-    private Boolean isFavorites =false;
+    private Boolean isFavorites = false;
 
     private TrailerAdapter mTrailerAdapter;
     private List<Videos> videosList;
 
-    private List<Movie> favoriteList;
+
 
     private ReviewAdapter mReviewAdapter;
 
@@ -66,7 +63,7 @@ public class MovieDetailsActivity extends AppCompatActivity  implements TrailerA
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
 
-        favoriteList = new ArrayList<>();
+
         videosList = new ArrayList<>();
         mTrailerAdapter = new TrailerAdapter(new ArrayList<>(), this);
 
@@ -99,24 +96,26 @@ public class MovieDetailsActivity extends AppCompatActivity  implements TrailerA
         getMovieTrailerKeys();
         getMovieReviews();
 
-        addToFavorites();
+        modifyFavorites();
 
     }
 
-    private void addToFavorites() {
+    private void modifyFavorites() {
 
         favoriteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
             if(!isFavorites){
-            favoriteList.add(mMovie);
-            Log.d("favorites size:","size is:"+favoriteList.size());
+                //add movie to favoritesDB
+                mDetailsActivityViewModel.insertToFavorites(mMovie);
                 Log.d("movie Added:", mMovie.getTitle());
                 favoriteButton.setImageResource(R.drawable.ic_star_24px);
                 isFavorites =true;
             }
+
             else if(isFavorites){
-                favoriteList.remove(mMovie);
+
+              mDetailsActivityViewModel.deleteFromFavorites(mMovie);
                 Log.d("movie Removed:", mMovie.getTitle());
                 favoriteButton.setImageResource(R.drawable.ic_star_border_24px);
                 isFavorites =false;

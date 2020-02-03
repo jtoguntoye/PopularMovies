@@ -1,5 +1,8 @@
 package com.e.popularmoviesudacity;
 
+import android.app.Application;
+import android.content.Context;
+
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
@@ -8,8 +11,9 @@ import androidx.lifecycle.ViewModelProvider;
 public class detailsViewModelFactory implements ViewModelProvider.Factory {
 
     private  int movieID;
-
+    private Application application;
     public detailsViewModelFactory(int movieID) {
+        application = new Application();
         this.movieID = movieID;
     }
 
@@ -19,7 +23,8 @@ public class detailsViewModelFactory implements ViewModelProvider.Factory {
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
         if(modelClass.isAssignableFrom(DetailsViewModel.class)){
-        return (T) new DetailsViewModel(movieID);
+
+        return (T) new DetailsViewModel(application,movieID);
     }
         throw new IllegalArgumentException("unknown viewModel class");
     }

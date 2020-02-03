@@ -53,7 +53,7 @@ dependencies {
 
     implementation 'com.android.support:recyclerview-v7:29.0.0'
 
-    def lifecycle_version = "2.1.0"
+    def lifecycle_version = "2.2.0"
     // ViewModel and LiveData
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
 
@@ -62,4 +62,13 @@ dependencies {
 
     // Skip this if you don't want to use integration libraries or configure Glide.
     annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
+
+    //add Room database dependencies
+    def room_version = "2.2.3"
+
+    implementation "androidx.room:room-runtime:$room_version"
+    annotationProcessor "androidx.room:room-compiler:$room_version"
+
+    // Test helpers
+    testImplementation "androidx.room:room-testing:$room_version"
 }

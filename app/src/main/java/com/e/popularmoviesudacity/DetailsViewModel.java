@@ -1,38 +1,53 @@
 package com.e.popularmoviesudacity;
 
 
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
+import android.app.Application;
+import android.content.Context;
 
+import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
+
+
+import com.e.popularmoviesudacity.model.Movie;
 import com.e.popularmoviesudacity.model.Reviews;
 import com.e.popularmoviesudacity.model.Videos;
 
 import java.util.List;
 
 // this viewModel class is used to get the video trailers for each movie from the data source class
-class DetailsViewModel extends ViewModel {
+//it extends AndroidViewModel since we need to get the context inside the viewModel
+class DetailsViewModel extends AndroidViewModel {
 
 
     private final com.e.popularmoviesudacity.movieDataSource movieDataSource;
+
+    private MoviesRepository moviesRepository;
     private int movieID;
 
-    public DetailsViewModel(int movieID) {
+    public DetailsViewModel(Application application, int movieID) {
+        super(application);
         this.movieID = movieID;
+        moviesRepository = new MoviesRepository(application);
         movieDataSource = new movieDataSource();
 
-        //reviewList= movieDataSource.getMovieReviews(movieID);
-        //Log.d("MODEL TAG","VideoList size:"+(videosList.size()));
-        //Log.d("TRAILERVIEWMODEL", String.valueOf(videosList.size()));
     }
 
    public LiveData<List<Videos>> getVideosList(){
      return  movieDataSource.getMovieTrailers(movieID);
 
-
     }
 
     public LiveData<List<Reviews>> getReviewList(){
         return movieDataSource.getMovieReviews(movieID);
+    }
+
+
+    //setter method to insert a favorite to the database via the repository
+    public void insertToFavorites(Movie movie){
+        moviesRepository.insertFavorite(movie);
+    }
+
+    public void deleteFromFavorites(Movie movie){
+        moviesRepository.deleteFavorite(movie);
     }
 }
