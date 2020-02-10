@@ -2,6 +2,8 @@ package com.e.popularmoviesudacity;
 
 
 
+import android.app.Application;
+
 import androidx.lifecycle.LiveData;
 
 import androidx.lifecycle.ViewModel;
@@ -14,9 +16,11 @@ public class MainActivityViewModel extends ViewModel {
 
 
     private final com.e.popularmoviesudacity.movieDataSource movieDataSource;
+    private MoviesRepository moviesRepository;
 
-    public MainActivityViewModel() {
+    public MainActivityViewModel(Application application) {
         movieDataSource = new movieDataSource();
+        moviesRepository = new MoviesRepository(application);
 
     }
 
@@ -28,6 +32,10 @@ public class MainActivityViewModel extends ViewModel {
 
         LiveData<List<Movie>> getTopRatedList(){
         return movieDataSource.getTopRated();
+    }
+
+    LiveData<List<Movie>> getFavoritesList(){
+       return moviesRepository.getAllFavorites();
     }
 
 }

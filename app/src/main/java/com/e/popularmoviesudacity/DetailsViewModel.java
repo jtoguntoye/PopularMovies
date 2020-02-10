@@ -57,7 +57,7 @@ class DetailsViewModel extends AndroidViewModel {
         return moviesRepository.getAllFavorites();
     }
 
-    public LiveData<Integer> getFavorite(int movieID){
+    public LiveData<Movie> getFavorite(int movieID){
         return moviesRepository.getFavorite(movieID);
     }
 }

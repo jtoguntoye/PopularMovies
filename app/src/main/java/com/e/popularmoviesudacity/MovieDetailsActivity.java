@@ -97,33 +97,22 @@ public class MovieDetailsActivity extends AppCompatActivity  implements TrailerA
         getMovieTrailerKeys();
         getMovieReviews();
 
-       if (initFavoriteButtonStatus()!=-1) {
-           isFavorites=true;
-           favoriteButton.setImageResource(R.drawable.ic_star_24px);
-       }
-       else {
-           isFavorites = false;
-            favoriteButton.setImageResource(R.drawable.ic_star_border_24px);
-       }
-
-
         modifyFavorites();
 
     }
 
-    int  initFavoriteButtonStatus(){
+    void   initFavoriteButtonStatus() {
 
         //query to see if the movie already exists in the DB
-        mDetailsActivityViewModel.getFavorite(movieID).observe(this, new Observer<Integer>() {
+        mDetailsActivityViewModel.getFavorite(movieID).observe(this, new Observer<Movie>() {
             @Override
-            public void onChanged(Integer movieID) {
-                if(movieID!=null)
-                favoriteID=movieID;
-
-            }});
-        return favoriteID;
-        }
-
+            public void onChanged(Movie movie) {
+                if (movie!=null)
+                    isFavorites =true;
+                else isFavorites =false;
+            }
+        });
+    }
     private void modifyFavorites() {
 
         favoriteButton.setOnClickListener(new View.OnClickListener() {
@@ -150,7 +139,7 @@ public class MovieDetailsActivity extends AppCompatActivity  implements TrailerA
 
 
     //helper method to get the movie details and populate the child views and also get the videolist
-    private int readMoviesDetails() {
+    private void readMoviesDetails() {
         Intent movieIntent  = getIntent();
         mMovie = movieIntent.getParcelableExtra(ParceledMovie);
         if(mMovie !=null) {
@@ -158,6 +147,10 @@ public class MovieDetailsActivity extends AppCompatActivity  implements TrailerA
             movieYear.setText(mMovie.getReleaseDate().split("-")[0]);
             movieRating.setText(String.valueOf(mMovie.getMovieRating()));
             movieID = mMovie.getId();
+
+            //initialize the favorite button
+            initFavoriteButtonStatus();
+
             posterPath = mMovie.getMoviePosterPath();
             movieOverview.setText(mMovie.getMovieOverview());
 
@@ -168,12 +161,12 @@ public class MovieDetailsActivity extends AppCompatActivity  implements TrailerA
                     .into(moviePoster);
 
 
-        return movieID;
+
         }
         else{
             Log.d("TAG DETAILS", "EMPTY EXTRA");
 
-        return -1;
+
         }
     }
 
@@ -184,7 +177,6 @@ public class MovieDetailsActivity extends AppCompatActivity  implements TrailerA
          mTrailerAdapter.setVideosList(videos);
          videosList= videos;
      });
-
 
     }
 

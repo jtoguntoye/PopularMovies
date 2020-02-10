@@ -30,6 +30,8 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.mov
     private MainActivityViewModel mainActivityViewModel;
     private SharedPreferences sharedPref;
 
+    private MainActivityViewModelFactory factory;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,8 +42,10 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.mov
 
 
         mMovieList  = new ArrayList<>();
-        mainActivityViewModel =
-                ViewModelProviders.of(this)
+
+
+        factory = new MainActivityViewModelFactory(getApplication());
+        mainActivityViewModel = ViewModelProviders.of(this,factory )
                         .get(MainActivityViewModel.class);
 
         moviesAdapter = new MoviesAdapter(new ArrayList<>(),this);
@@ -102,6 +106,13 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.mov
                     Log.d("MAIN RATED", String.valueOf(movieList.size()));
                 });
                 break;
+            case "Favorites":
+                mainActivityViewModel.getFavoritesList().observe(this, movieList -> {
+                    moviesAdapter.setAdapterMovieList(movieList);
+                    mMovieList = movieList;
+                    Log.d("FAVORITES", String.valueOf(movieList.size()));
+                });
+
         }
     }
     @Override
