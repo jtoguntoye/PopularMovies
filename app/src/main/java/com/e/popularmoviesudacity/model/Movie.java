@@ -5,6 +5,7 @@ import android.os.Parcelable;
 import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
@@ -24,19 +25,24 @@ public class Movie implements Parcelable {
     @SerializedName("id")
     private int id;
 
+    @ColumnInfo
     @SerializedName("vote_average")
     private Float movieRating;
 
+    @ColumnInfo
     @SerializedName("poster_path")
     private String moviePosterPath;
 
 
+    @ColumnInfo
     @SerializedName("title")
     private String title;
 
+    @ColumnInfo
     @SerializedName("overview")
     private String movieOverview;
 
+    @ColumnInfo
     @SerializedName("release_date")
     private String releaseDate;
 

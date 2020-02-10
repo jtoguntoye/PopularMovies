@@ -12,8 +12,8 @@ public class detailsViewModelFactory implements ViewModelProvider.Factory {
 
     private  int movieID;
     private Application application;
-    public detailsViewModelFactory(int movieID) {
-        application = new Application();
+    public detailsViewModelFactory(Application application, int movieID) {
+        this.application = application;
         this.movieID = movieID;
     }
 

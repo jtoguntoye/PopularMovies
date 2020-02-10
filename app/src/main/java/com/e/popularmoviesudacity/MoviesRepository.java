@@ -1,6 +1,7 @@
 package com.e.popularmoviesudacity;
 
 import android.app.Application;
+import android.content.Context;
 
 import androidx.lifecycle.LiveData;
 
@@ -16,11 +17,16 @@ public class MoviesRepository {
     private FavoritesDao mFavoritesDao;
     private LiveData<List<Movie>> mFavorites;
 
+
     public MoviesRepository(Application application) {
 
         FavoritesDB favoritesDB = FavoritesDB.getDatabaseInstance(application);
         mFavoritesDao = favoritesDB.favoritesDao();
 
+    }
+
+    LiveData<Integer> getFavorite(int movieID){
+        return mFavoritesDao.getFavorite(movieID);
     }
 
     LiveData<List<Movie>> getAllFavorites(){

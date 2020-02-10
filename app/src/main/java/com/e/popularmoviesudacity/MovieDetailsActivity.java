@@ -12,6 +12,8 @@ import com.e.popularmoviesudacity.model.Videos;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -36,6 +38,7 @@ public class MovieDetailsActivity extends AppCompatActivity  implements TrailerA
     private ImageView moviePoster;
     private Movie mMovie;
     private int movieID;
+    private  int favoriteID;
     private ImageButton favoriteButton;
 
     //initializing the favorites boolean to false
@@ -63,10 +66,8 @@ public class MovieDetailsActivity extends AppCompatActivity  implements TrailerA
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
 
-
         videosList = new ArrayList<>();
         mTrailerAdapter = new TrailerAdapter(new ArrayList<>(), this);
-
 
         mReviewAdapter = new ReviewAdapter(new ArrayList<>());
 
@@ -89,16 +90,39 @@ public class MovieDetailsActivity extends AppCompatActivity  implements TrailerA
         readMoviesDetails();
 
       //get the viewModel class for the Details Activity to get the trailers and reviews for each movie
-        factory = new detailsViewModelFactory(movieID);
+        factory = new detailsViewModelFactory(getApplication(),movieID);
         mDetailsActivityViewModel = ViewModelProviders.of(this, factory)
                 .get(DetailsViewModel.class);
 
         getMovieTrailerKeys();
         getMovieReviews();
 
+       if (initFavoriteButtonStatus()!=-1) {
+           isFavorites=true;
+           favoriteButton.setImageResource(R.drawable.ic_star_24px);
+       }
+       else {
+           isFavorites = false;
+            favoriteButton.setImageResource(R.drawable.ic_star_border_24px);
+       }
+
+
         modifyFavorites();
 
     }
+
+    int  initFavoriteButtonStatus(){
+
+        //query to see if the movie already exists in the DB
+        mDetailsActivityViewModel.getFavorite(movieID).observe(this, new Observer<Integer>() {
+            @Override
+            public void onChanged(Integer movieID) {
+                if(movieID!=null)
+                favoriteID=movieID;
+
+            }});
+        return favoriteID;
+        }
 
     private void modifyFavorites() {
 
@@ -108,12 +132,12 @@ public class MovieDetailsActivity extends AppCompatActivity  implements TrailerA
             if(!isFavorites){
                 //add movie to favoritesDB
                 mDetailsActivityViewModel.insertToFavorites(mMovie);
-                Log.d("movie Added:", mMovie.getTitle());
+                Log.d("Favorite movie Added:", mMovie.getTitle());
                 favoriteButton.setImageResource(R.drawable.ic_star_24px);
                 isFavorites =true;
             }
 
-            else if(isFavorites){
+            else {
 
               mDetailsActivityViewModel.deleteFromFavorites(mMovie);
                 Log.d("movie Removed:", mMovie.getTitle());
@@ -126,7 +150,7 @@ public class MovieDetailsActivity extends AppCompatActivity  implements TrailerA
 
 
     //helper method to get the movie details and populate the child views and also get the videolist
-    private void readMoviesDetails() {
+    private int readMoviesDetails() {
         Intent movieIntent  = getIntent();
         mMovie = movieIntent.getParcelableExtra(ParceledMovie);
         if(mMovie !=null) {
@@ -143,9 +167,13 @@ public class MovieDetailsActivity extends AppCompatActivity  implements TrailerA
                     .apply(RequestOptions.placeholderOf(R.color.colorPrimary))
                     .into(moviePoster);
 
+
+        return movieID;
         }
         else{
             Log.d("TAG DETAILS", "EMPTY EXTRA");
+
+        return -1;
         }
     }
 

@@ -17,7 +17,11 @@ public interface FavoritesDao {
     @Query("SELECT * FROM favorites_table")
     LiveData<List<Movie>>getAllFavorites();
 
-    @Insert(onConflict=OnConflictStrategy.ABORT )
+
+    @Query("SELECT id FROM favorites_table where  id=:movieID")
+    LiveData<Integer>getFavorite(int movieID);
+
+    @Insert(onConflict=OnConflictStrategy.IGNORE )
     void insertFavorite(Movie favoriteMovie);
 
     @Delete

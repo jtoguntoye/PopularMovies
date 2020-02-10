@@ -12,6 +12,7 @@ import com.e.popularmoviesudacity.model.Movie;
 import com.e.popularmoviesudacity.model.Reviews;
 import com.e.popularmoviesudacity.model.Videos;
 
+import java.net.Inet4Address;
 import java.util.List;
 
 // this viewModel class is used to get the video trailers for each movie from the data source class
@@ -43,11 +44,20 @@ class DetailsViewModel extends AndroidViewModel {
 
 
     //setter method to insert a favorite to the database via the repository
-    public void insertToFavorites(Movie movie){
+    void insertToFavorites(Movie movie){
         moviesRepository.insertFavorite(movie);
     }
 
-    public void deleteFromFavorites(Movie movie){
+    void deleteFromFavorites(Movie movie){
         moviesRepository.deleteFavorite(movie);
+    }
+
+
+    public LiveData<List<Movie>> getAllFavorites(){
+        return moviesRepository.getAllFavorites();
+    }
+
+    public LiveData<Integer> getFavorite(int movieID){
+        return moviesRepository.getFavorite(movieID);
     }
 }
