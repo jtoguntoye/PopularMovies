@@ -25,7 +25,7 @@ public class MoviesRepository {
 
     }
 
-    LiveData<Integer> getFavorite(int movieID){
+    LiveData<Movie> getFavorite(int movieID){
         return mFavoritesDao.getFavorite(movieID);
     }
 

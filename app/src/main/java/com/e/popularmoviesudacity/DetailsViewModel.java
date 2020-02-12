@@ -25,21 +25,21 @@ class DetailsViewModel extends AndroidViewModel {
     private MoviesRepository moviesRepository;
     private int movieID;
 
-    public DetailsViewModel(Application application, int movieID) {
+    public DetailsViewModel(Application application) {
         super(application);
-        this.movieID = movieID;
+        //this.movieID = movieID;
         moviesRepository = new MoviesRepository(application);
         movieDataSource = new movieDataSource();
 
     }
 
-   public LiveData<List<Videos>> getVideosList(){
-     return  movieDataSource.getMovieTrailers(movieID);
+   public LiveData<List<Videos>> getVideosList(int id){
+     return  movieDataSource.getMovieTrailers(id);
 
     }
 
-    public LiveData<List<Reviews>> getReviewList(){
-        return movieDataSource.getMovieReviews(movieID);
+    public LiveData<List<Reviews>> getReviewList(int id){
+        return movieDataSource.getMovieReviews(id);
     }
 
 
@@ -57,7 +57,7 @@ class DetailsViewModel extends AndroidViewModel {
         return moviesRepository.getAllFavorites();
     }
 
-    public LiveData<Integer> getFavorite(int movieID){
+    public LiveData<Movie> getFavorite(int movieID){
         return moviesRepository.getFavorite(movieID);
     }
 }

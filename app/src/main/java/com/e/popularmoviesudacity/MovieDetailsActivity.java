@@ -38,7 +38,7 @@ public class MovieDetailsActivity extends AppCompatActivity  implements TrailerA
     private ImageView moviePoster;
     private Movie mMovie;
     private int movieID;
-    private  int favoriteID;
+    //private  int favoriteID;
     private ImageButton favoriteButton;
 
     //initializing the favorites boolean to false
@@ -89,41 +89,41 @@ public class MovieDetailsActivity extends AppCompatActivity  implements TrailerA
 
 
 
+
       //get the viewModel class for the Details Activity to get the trailers and reviews for each movie
-        factory = new detailsViewModelFactory(getApplication(),movieID);
+        factory = new detailsViewModelFactory(getApplication());
         mDetailsActivityViewModel = ViewModelProviders.of(this, factory)
                 .get(DetailsViewModel.class);
 
+
         readMoviesDetails();
-        
         getMovieTrailerKeys();
         getMovieReviews();
 
-       if (initFavoriteButtonStatus()!=-1) {
-           isFavorites=true;
-           favoriteButton.setImageResource(R.drawable.ic_star_24px);
-       }
-       else {
-           isFavorites = false;
-            favoriteButton.setImageResource(R.drawable.ic_star_border_24px);
-       }
 
 
         modifyFavorites();
 
     }
 
-    int  initFavoriteButtonStatus(){
+    void  initFavoriteButtonStatus(int id){
 
         //query to see if the movie already exists in the DB
-        mDetailsActivityViewModel.getFavorite(movieID).observe(this, new Observer<Integer>() {
+        mDetailsActivityViewModel.getFavorite(id).observe(this, new Observer<Movie>() {
             @Override
-            public void onChanged(Integer movieID) {
-                if(movieID!=null)
-                favoriteID=movieID;
+            public void onChanged(Movie movie) {
+                if(movie!=null){
+                    isFavorites=true;
+                    favoriteButton.setImageResource(R.drawable.ic_star_24px);
+                }
+                else {
+                    isFavorites = false;
+                    favoriteButton.setImageResource(R.drawable.ic_star_border_24px);
+                }
+
 
             }});
-        return favoriteID;
+
         }
 
     private void modifyFavorites() {
@@ -160,6 +160,8 @@ public class MovieDetailsActivity extends AppCompatActivity  implements TrailerA
             movieYear.setText(mMovie.getReleaseDate().split("-")[0]);
             movieRating.setText(String.valueOf(mMovie.getMovieRating()));
             movieID = mMovie.getId();
+
+            initFavoriteButtonStatus(movieID);
             posterPath = mMovie.getMoviePosterPath();
             movieOverview.setText(mMovie.getMovieOverview());
 
@@ -182,7 +184,7 @@ public class MovieDetailsActivity extends AppCompatActivity  implements TrailerA
     //helper method to get movieTrailer keys from TMDB API
     private void getMovieTrailerKeys() {
 
-     mDetailsActivityViewModel.getVideosList().observe(this, (List<Videos> videos) -> {
+     mDetailsActivityViewModel.getVideosList(movieID).observe(this, (List<Videos> videos) -> {
          mTrailerAdapter.setVideosList(videos);
          videosList= videos;
      });
@@ -192,7 +194,7 @@ public class MovieDetailsActivity extends AppCompatActivity  implements TrailerA
 
     //helper method to get the movie reviews
     private void getMovieReviews(){
-        mDetailsActivityViewModel.getReviewList().observe(this, reviews -> {
+        mDetailsActivityViewModel.getReviewList(movieID).observe(this, reviews -> {
            mReviewAdapter.setReviewsList(reviews);
 
         });
