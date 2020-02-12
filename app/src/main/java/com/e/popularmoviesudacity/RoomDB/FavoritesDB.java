@@ -7,6 +7,8 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
 import com.e.popularmoviesudacity.model.Movie;
+import com.e.popularmoviesudacity.model.Reviews;
+import com.e.popularmoviesudacity.model.Videos;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;

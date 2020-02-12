@@ -12,9 +12,9 @@ public class detailsViewModelFactory implements ViewModelProvider.Factory {
 
     private  int movieID;
     private Application application;
-    public detailsViewModelFactory(Application application, int movieID) {
+    public detailsViewModelFactory(Application application) {
         this.application = application;
-        this.movieID = movieID;
+
     }
 
 
@@ -24,7 +24,7 @@ public class detailsViewModelFactory implements ViewModelProvider.Factory {
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
         if(modelClass.isAssignableFrom(DetailsViewModel.class)){
 
-        return (T) new DetailsViewModel(application,movieID);
+        return (T) new DetailsViewModel(application);
     }
         throw new IllegalArgumentException("unknown viewModel class");
     }

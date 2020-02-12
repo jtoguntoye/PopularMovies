@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.mov
 
     }
 
-    //helper method to determine the grid width
+    //helper method to determine the grid width dynamically
     private int numOfColumns() {
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
@@ -112,6 +112,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.mov
                     mMovieList = movieList;
                     Log.d("FAVORITES", String.valueOf(movieList.size()));
                 });
+                break;
 
         }
     }
