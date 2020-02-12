@@ -87,13 +87,15 @@ public class MovieDetailsActivity extends AppCompatActivity  implements TrailerA
         reviewRecyclerview.setLayoutManager(new LinearLayoutManager(this));
         reviewRecyclerview.setAdapter(mReviewAdapter);
 
-        readMoviesDetails();
+
 
       //get the viewModel class for the Details Activity to get the trailers and reviews for each movie
         factory = new detailsViewModelFactory(getApplication(),movieID);
         mDetailsActivityViewModel = ViewModelProviders.of(this, factory)
                 .get(DetailsViewModel.class);
 
+        readMoviesDetails();
+        
         getMovieTrailerKeys();
         getMovieReviews();
 
