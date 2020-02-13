@@ -134,7 +134,7 @@ public class MovieDetailsActivity extends AppCompatActivity  implements TrailerA
             if(!isFavorites){
                 //add movie to favoritesDB
                 mDetailsActivityViewModel.insertToFavorites(mMovie);
-                Log.d("Favorite movie Added:", mMovie.getTitle());
+                //Log.d("Favorite movie Added:", mMovie.getTitle());
                 favoriteButton.setImageResource(R.drawable.ic_star_24px);
                 isFavorites =true;
             }
@@ -142,7 +142,7 @@ public class MovieDetailsActivity extends AppCompatActivity  implements TrailerA
             else {
 
               mDetailsActivityViewModel.deleteFromFavorites(mMovie);
-                Log.d("movie Removed:", mMovie.getTitle());
+                //Log.d("movie Removed:", mMovie.getTitle());
                 favoriteButton.setImageResource(R.drawable.ic_star_border_24px);
                 isFavorites =false;
             }
@@ -162,6 +162,7 @@ public class MovieDetailsActivity extends AppCompatActivity  implements TrailerA
             movieID = mMovie.getId();
 
             initFavoriteButtonStatus(movieID);
+
             posterPath = mMovie.getMoviePosterPath();
             movieOverview.setText(mMovie.getMovieOverview());
 
@@ -175,7 +176,7 @@ public class MovieDetailsActivity extends AppCompatActivity  implements TrailerA
         return movieID;
         }
         else{
-            Log.d("TAG DETAILS", "EMPTY EXTRA");
+            //Log.d("TAG DETAILS", "EMPTY EXTRA");
 
         return -1;
         }
