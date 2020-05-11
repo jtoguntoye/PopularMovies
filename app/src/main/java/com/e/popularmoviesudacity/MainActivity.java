@@ -74,7 +74,6 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.mov
         return numColumns;
     }
 
-
     //helper method to set up sharedPrefereces
     private void setUpSharedPreferences(){
         //set up shared preferences default value
@@ -100,7 +99,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.mov
                 });
                 break;
             case "Highest Rated":
-                mainActivityViewModel.getTopRatedList().observe(this, movieList -> {
+                mainActivityViewModel.getTopRatedList().observe(this, (List<Movie> movieList) -> {
                     moviesAdapter.setAdapterMovieList(movieList);
                     mMovieList=movieList;
                     Log.d("MAIN RATED", String.valueOf(movieList.size()));

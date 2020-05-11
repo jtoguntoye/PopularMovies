@@ -60,6 +60,7 @@ public class Movie implements Parcelable {
 
     //this inner class  helps to make the movies class re-creatable from a parcel
     public static final Creator<Movie> CREATOR = new Creator<Movie>() {
+
         @Override
         public Movie createFromParcel(Parcel in) {
             return new Movie(in);

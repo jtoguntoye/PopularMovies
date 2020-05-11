@@ -12,13 +12,11 @@ import com.e.popularmoviesudacity.model.Videos;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -54,8 +52,9 @@ public class MovieDetailsActivity extends AppCompatActivity  implements TrailerA
 
    // private  movieDataSource movieDataSource;
     public static final String ParceledMovie = "com.e.popularmovies.PARCELED_MOVIE";
-    private detailsViewModelFactory factory;
+    private DetailsViewModelFactory factory;
     private DetailsViewModel mDetailsActivityViewModel;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,7 +90,7 @@ public class MovieDetailsActivity extends AppCompatActivity  implements TrailerA
 
 
       //get the viewModel class for the Details Activity to get the trailers and reviews for each movie
-        factory = new detailsViewModelFactory(getApplication());
+        factory = new DetailsViewModelFactory(getApplication());
         mDetailsActivityViewModel = ViewModelProviders.of(this, factory)
                 .get(DetailsViewModel.class);
 

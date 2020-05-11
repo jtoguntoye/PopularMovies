@@ -7,16 +7,14 @@ import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.SerializedName;
 
-
 public class Reviews {
 
     public Reviews(){}
 
 
-
-
     @SerializedName("author")
     private String author;
+
 
     @SerializedName("content")
     private String content;
@@ -35,7 +33,4 @@ public class Reviews {
         this.content = content;
     }
 
-    public void setAuthor(String author) {
-        this.author = author;
-    }
 }

@@ -13,7 +13,7 @@ import com.e.popularmoviesudacity.model.Videos;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {Movie.class}, version = 1, exportSchema = false)
+@Database(entities = {Movie.class}, version = 1)
 public abstract class FavoritesDB extends RoomDatabase {
 
     //create an abstract getter method for each DAO

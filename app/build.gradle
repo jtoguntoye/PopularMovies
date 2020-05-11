@@ -15,6 +15,13 @@ android {
     buildToolsVersion "29.0.0"
     defaultConfig {
 
+        //used by Room to export the DB schema into a JSON file
+        javaCompileOptions{
+            annotationProcessorOptions{
+                arguments =["room.schemaLocation": "$projectDir/schemas".toString()]
+            }
+        }
+
         // should correspond to key/value pairs inside the file
         buildConfigField("String", "TMDB_API_KEY", apikeyProperties['TMDB-API-KEY'])
 
@@ -25,12 +32,22 @@ android {
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
+
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    //used to test Room Migrations
+    sourceSets{
+        androidTest.assets.srcDirs +=
+                                files("$projectDir/schemas".toString())
+    }
+
+
 }
 
 dependencies {
