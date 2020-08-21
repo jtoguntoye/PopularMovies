@@ -17,6 +17,7 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.view.Menu;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -42,6 +43,8 @@ public class MovieDetailsActivity extends AppCompatActivity  implements TrailerA
     //initializing the favorites boolean to false
     private Boolean isFavorites = false;
 
+
+
     private TrailerAdapter mTrailerAdapter;
     private List<Videos> videosList;
 
@@ -52,7 +55,7 @@ public class MovieDetailsActivity extends AppCompatActivity  implements TrailerA
 
    // private  movieDataSource movieDataSource;
     public static final String ParceledMovie = "com.e.popularmovies.PARCELED_MOVIE";
-    private DetailsViewModelFactory factory;
+    private detailsViewModelFactory factory;
     private DetailsViewModel mDetailsActivityViewModel;
 
 
@@ -86,16 +89,14 @@ public class MovieDetailsActivity extends AppCompatActivity  implements TrailerA
         reviewRecyclerview.setLayoutManager(new LinearLayoutManager(this));
         reviewRecyclerview.setAdapter(mReviewAdapter);
 
-
-
-
+        readMoviesDetails();
       //get the viewModel class for the Details Activity to get the trailers and reviews for each movie
-        factory = new DetailsViewModelFactory(getApplication());
+        factory = new detailsViewModelFactory(getApplication(), movieID);
         mDetailsActivityViewModel = ViewModelProviders.of(this, factory)
                 .get(DetailsViewModel.class);
 
+        initFavoriteButtonStatus(movieID);
 
-        readMoviesDetails();
         getMovieTrailerKeys();
         getMovieReviews();
 
@@ -108,20 +109,18 @@ public class MovieDetailsActivity extends AppCompatActivity  implements TrailerA
     void  initFavoriteButtonStatus(int id){
 
         //query to see if the movie already exists in the DB
-        mDetailsActivityViewModel.getFavorite(id).observe(this, new Observer<Movie>() {
-            @Override
-            public void onChanged(Movie movie) {
-                if(movie!=null){
-                    isFavorites=true;
-                    favoriteButton.setImageResource(R.drawable.ic_star_24px);
-                }
-                else {
-                    isFavorites = false;
-                    favoriteButton.setImageResource(R.drawable.ic_star_border_24px);
-                }
+        mDetailsActivityViewModel.getFavorite(id).observe(this, movie -> {
+            if(movie!=null){
+                isFavorites=true;
+                favoriteButton.setImageResource(R.drawable.ic_star_24px);
+            }
+            else {
+                isFavorites = false;
+                favoriteButton.setImageResource(R.drawable.ic_star_border_24px);
+            }
 
 
-            }});
+        });
 
         }
 
@@ -133,7 +132,7 @@ public class MovieDetailsActivity extends AppCompatActivity  implements TrailerA
             if(!isFavorites){
                 //add movie to favoritesDB
                 mDetailsActivityViewModel.insertToFavorites(mMovie);
-                //Log.d("Favorite movie Added:", mMovie.getTitle());
+
                 favoriteButton.setImageResource(R.drawable.ic_star_24px);
                 isFavorites =true;
             }
@@ -141,7 +140,7 @@ public class MovieDetailsActivity extends AppCompatActivity  implements TrailerA
             else {
 
               mDetailsActivityViewModel.deleteFromFavorites(mMovie);
-                //Log.d("movie Removed:", mMovie.getTitle());
+
                 favoriteButton.setImageResource(R.drawable.ic_star_border_24px);
                 isFavorites =false;
             }
@@ -155,12 +154,12 @@ public class MovieDetailsActivity extends AppCompatActivity  implements TrailerA
         Intent movieIntent  = getIntent();
         mMovie = movieIntent.getParcelableExtra(ParceledMovie);
         if(mMovie !=null) {
+            this.setTitle(mMovie.getTitle());
             movieTitle.setText(mMovie.getTitle());
             movieYear.setText(mMovie.getReleaseDate().split("-")[0]);
             movieRating.setText(String.valueOf(mMovie.getMovieRating()));
             movieID = mMovie.getId();
 
-            initFavoriteButtonStatus(movieID);
 
             posterPath = mMovie.getMoviePosterPath();
             movieOverview.setText(mMovie.getMovieOverview());
@@ -175,7 +174,7 @@ public class MovieDetailsActivity extends AppCompatActivity  implements TrailerA
         return movieID;
         }
         else{
-            //Log.d("TAG DETAILS", "EMPTY EXTRA");
+
 
         return -1;
         }
@@ -184,7 +183,7 @@ public class MovieDetailsActivity extends AppCompatActivity  implements TrailerA
     //helper method to get movieTrailer keys from TMDB API
     private void getMovieTrailerKeys() {
 
-     mDetailsActivityViewModel.getVideosList(movieID).observe(this, (List<Videos> videos) -> {
+     mDetailsActivityViewModel.getVideosList().observe(this, (List<Videos> videos) -> {
          mTrailerAdapter.setVideosList(videos);
          videosList= videos;
      });
@@ -194,7 +193,7 @@ public class MovieDetailsActivity extends AppCompatActivity  implements TrailerA
 
     //helper method to get the movie reviews
     private void getMovieReviews(){
-        mDetailsActivityViewModel.getReviewList(movieID).observe(this, reviews -> {
+        mDetailsActivityViewModel.getReviewList().observe(this, reviews -> {
            mReviewAdapter.setReviewsList(reviews);
 
         });

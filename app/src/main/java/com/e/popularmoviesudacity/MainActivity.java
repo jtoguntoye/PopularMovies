@@ -56,10 +56,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.mov
         mRecyclerView.setLayoutManager(gridLayoutManager);
 
         mRecyclerView.setAdapter(moviesAdapter);
-
         setUpSharedPreferences();
-
-
     }
 
     //helper method to determine the grid width dynamically

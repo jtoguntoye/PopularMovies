@@ -13,6 +13,7 @@ import com.e.popularmoviesudacity.model.Movie;
 import java.util.List;
 
 public class MainActivityViewModel extends ViewModel {
+    private LiveData<List<Movie>> popularMovies, topRatedMovies, favoriteMovies;
 
 
     private final com.e.popularmoviesudacity.movieDataSource movieDataSource;
@@ -21,21 +22,24 @@ public class MainActivityViewModel extends ViewModel {
     public MainActivityViewModel(Application application) {
         movieDataSource = new movieDataSource();
         moviesRepository = new MoviesRepository(application);
+        favoriteMovies = moviesRepository.getAllFavorites();
+        popularMovies = movieDataSource.getPopularMovies();
+        topRatedMovies = movieDataSource.getTopRated();
 
     }
 
 
-        LiveData<List<Movie>> getPopularMoviesLiveData(){
-        return movieDataSource.getPopularMovies();
+       public LiveData<List<Movie>> getPopularMoviesLiveData(){
+       return popularMovies;
         }
 
 
-        LiveData<List<Movie>> getTopRatedList(){
-        return movieDataSource.getTopRated();
+        public LiveData<List<Movie>> getTopRatedList(){
+            return topRatedMovies;
     }
 
-    LiveData<List<Movie>> getFavoritesList(){
-       return moviesRepository.getAllFavorites();
+    public LiveData<List<Movie>> getFavoritesList(){
+      return favoriteMovies;
     }
 
 }

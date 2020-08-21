@@ -42,8 +42,10 @@ class movieDataSource {
     }
     //helper method to get list of popular movies
     LiveData<List<Movie>> getPopularMovies(){
+        //add your TMDB apiKey here
+        // (replace the parameter of the TMDB interface method calls below with your own API
      Call<MovieResponse> popularMoviesCall =
-      tmdbInterface.getPopularMovies(BuildConfig.TMDB_API_KEY); //add your TMDB apiKey here
+      tmdbInterface.getPopularMovies(BuildConfig.TMDB_API_KEY);
 
      popularMoviesCall.enqueue(new Callback<MovieResponse>() {
        @Override

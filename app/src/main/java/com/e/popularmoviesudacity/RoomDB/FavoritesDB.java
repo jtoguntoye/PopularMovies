@@ -27,7 +27,7 @@ public abstract class FavoritesDB extends RoomDatabase {
     //instantiate the RoomDatabase using a singleton pattern
     public static FavoritesDB getDatabaseInstance(final Context context){
         if(INSTANCE ==null){
-            synchronized (FavoritesDB.class){
+            synchronized (FavoritesDB.class) {
                 if(INSTANCE==null){
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                             FavoritesDB.class,"favorites_database")

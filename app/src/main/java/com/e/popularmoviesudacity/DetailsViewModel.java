@@ -23,23 +23,24 @@ class DetailsViewModel extends AndroidViewModel {
     private final com.e.popularmoviesudacity.movieDataSource movieDataSource;
 
     private MoviesRepository moviesRepository;
-    private int movieID;
+    private LiveData<List<Videos>> videoList;
+    private LiveData<List<Reviews>> reviewsList;
 
-    public DetailsViewModel(Application application) {
+    public DetailsViewModel(Application application, int movieID) {
         super(application);
-        //this.movieID = movieID;
         moviesRepository = new MoviesRepository(application);
         movieDataSource = new movieDataSource();
+        videoList = movieDataSource.getMovieTrailers(movieID);
+        reviewsList = movieDataSource.getMovieReviews(movieID);
+    }
+
+   public LiveData<List<Videos>> getVideosList(){
+     return  videoList;
 
     }
 
-   public LiveData<List<Videos>> getVideosList(int id){
-     return  movieDataSource.getMovieTrailers(id);
-
-    }
-
-    public LiveData<List<Reviews>> getReviewList(int id){
-        return movieDataSource.getMovieReviews(id);
+    public LiveData<List<Reviews>> getReviewList(){
+        return reviewsList;
     }
 
 
@@ -53,9 +54,6 @@ class DetailsViewModel extends AndroidViewModel {
     }
 
 
-    public LiveData<List<Movie>> getAllFavorites(){
-        return moviesRepository.getAllFavorites();
-    }
 
     public LiveData<Movie> getFavorite(int movieID){
         return moviesRepository.getFavorite(movieID);
